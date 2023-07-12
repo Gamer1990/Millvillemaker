@@ -1,0 +1,75 @@
+<html>
+<header>
+<title>Camera Controller</title>
+<style>
+Body{Width:100%;}
+iframe{Width:100%;
+}
+DIV.Camera {
+  width: 15%;
+  padding: 0px 0;
+  Margin: 0px 0;
+  text-align: center;
+  display:;
+  Float:left;
+  }
+DIV.Control {
+  width: 100%;
+  padding: 0px 0;
+  Margin: 0px 0;
+  text-align: center;
+  display:;
+  Float:left;
+  }
+</style>
+</header>
+<body>
+<html>
+<script type="text/javascript">
+<!--
+    function toggle_visibility(id) {
+       var e = document.getElementById(id);
+       if(e.style.display == 'block')
+          e.style.display = 'none';
+       else
+          e.style.display = 'Block';
+    }
+//-->
+</script>
+<div id="Camera Control">
+<div id="Buttons">
+<Button onclick="toggle_visibility('Blue');">Blue Phone</button>
+<button onclick="toggle_visibility('6');">6 Phone</button>
+<button onclick="toggle_visibility('Church Camera');">Chruch Camera</button>
+<button onclick="toggle_visibility('A');">A Phone</button>
+<button onclick="toggle_visibility('B');">B Phone</button>
+<!--button onclick="toggle_visibility('D');">D Phone</button>
+<button onclick="toggle_visibility('C');">C Phone</button>-->
+</div>
+<div Class="Camera" id="Blue">Phone Blue
+<iframe src="http://192.168.50.68:4747/remote" title="description" height="50%" width="100%"></iframe>
+</div>
+<div Class="Camera" id="6"> Phone 6
+<iframe src="http://192.168.50.68:4747/remote" title="description" height="50%" width="100%"></iframe>
+</div>
+<div Class="Camera" id="Church Camera"> Phone Chruch
+<iframe src="http://192.168.50.68:4747/remote" title="description" height="50%" width="100%"></iframe>
+</div>
+<div Class="Camera" id="A"> Phone A
+<iframe src="http://192.168.50.68:4747/remote" title="description" height="50%" width="100%"></iframe>
+</div>
+<div Class="Camera" id="B"> Phone B
+<iframe src="http://192.168.50.68:4747/remote" title="description" height="50%" width="100%"></iframe>
+</div>
+<!--div Class="Camera" id="C">
+<iframe src="http://192.168.50.68:4747/remote" title="description" height="50%" width="100%"></iframe>
+</div>
+<div Class="Camera" id="D">
+<iframe src="http://192.168.50.68:4747/remote" title="description" height="50%" width="100%"></iframe>
+</div-->
+</div>
+<div Class="Control" id="Control"> 
+<iframe src="http://127.0.0.1:8888/emulator.html" title="description" height="50%" width="25%"></iframe>
+</div>
+</body>
+</html>
