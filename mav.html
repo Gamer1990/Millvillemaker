@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Number Barcode Generator</title>
+    <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 500px;
+            width: 100%;
+            padding: 40px;
+        }
+        
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 28px;
+        }
+        
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 600;
+            font-size: 14px;
+        }
+        
+        input[type="text"] {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 6px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+        
+        input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        
+        .barcode-type-group {
+            margin-bottom: 20px;
+        }
+        
+        .barcode-type-group label {
+            display: inline-block;
+            margin-right: 20px;
+            margin-bottom: 10px;
+            font-weight: 400;
+        }
+        
+        input[type="radio"] {
+            width: auto;
+            margin-right: 8px;
+            cursor: pointer;
+        }
+        
+        button {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+        
+        button:active {
+            transform: translateY(0);
+        }
+        
+        .barcode-container {
+            margin-top: 30px;
+            padding: 20px;
+            background: #f9f9f9;
+            border-radius: 8px;
+            text-align: center;
+            display: none;
+        }
+        
+        .barcode-container.active {
+            display: block;
+        }
+        
+        .barcode-label {
+            color: #666;
+            font-size: 12px;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        #barcodeDisplay {
+            margin: 20px 0;
+            background: white;
+            padding: 15px;
+            border-radius: 4px;
+            display: flex;
+            justify-content: center;
+            min-height: 120px;
+        }
+        
+        #barcodeDisplay svg {
+            max-width: 100%;
+            height: auto;
+        }
+        
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .button-group button {
+            flex: 1;
+            padding: 10px;
+            font-size: 14px;
+        }
+        
+        .download-btn {
+            background: #4CAF50;
+        }
+        
+        .download-btn:hover {
+            box-shadow: 0 10px 20px rgba(76, 175, 80, 0.3);
+        }
+        
+        .print-btn {
+            background: #2196F3;
+        }
+        
+        .print-btn:hover {
+            box-shadow: 0 10px 20px rgba(33, 150, 243, 0.3);
+        }
+        
+        .error {
+            color: #d32f2f;
+            font-size: 13px;
+            margin-top: 5px;
+            display: none;
+        }
+        
+        .error.show {
+            display: block;
+        }
+        
+        .info {
+            background: #e3f2fd;
+            border-left: 4px solid #2196F3;
+            padding: 10px 12px;
+            margin-top: 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            color: #1565c0;
+        }
+        
+        .preset-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-top: 8px;
+        }
+        
+        .preset-btn {
+            padding: 10px;
+            background: #f5f5f5;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 500;
+            color: #333;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .preset-btn:hover {
+            background: #e8f4f8;
+            border-color: #667eea;
+            color: #667eea;
+            transform: translateY(-1px);
+        }
+        
+        .preset-btn:active {
+            transform: translateY(0);
+        }
+        
+        @media print {
+            body {
+                background: white;
+            }
+            .container {
+                box-shadow: none;
+            }
+            .form-group, button, .button-group, .info {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📊 Number Barcode</h1>
+        <p class="subtitle">Convert numbers to scannable barcodes</p>
+        
+        <div class="form-group">
+            <label for="numberInput">Enter Numbers</label>
+            <input 
+                type="text" 
+                id="numberInput" 
+                placeholder="123456789"
+            >
+            <div class="info">Enter any number sequence</div>
+            <div class="error" id="numberError"></div>
+        </div>
+
+        <div class="form-group">
+            <label>Quick Presets</label>
+            <div class="preset-buttons">
+                <button type="button" class="preset-btn" onclick="setNumber('4357535353')">4357535353</button>
+                <button type="button" class="preset-btn" onclick="setNumber('4355126705')">4355126705</button>
+                <button type="button" class="preset-btn" onclick="setNumber('4352655079')">4352655079</button>
+                <button type="button" class="preset-btn" onclick="setNumber('4357604751')">4357604751</button>
+                <button type="button" class="preset-btn" onclick="setNumber('4357605864')">4357605864</button>
+                <button type="button" class="preset-btn" onclick="setNumber('4352323513')">4352323513</button>
+                <button type="button" class="preset-btn" onclick="setNumber('4353749505')">4353749505</button>
+                <button type="button" class="preset-btn" onclick="setNumber('4357607596')">4357607596</button>
+              <!--button type="button" class="preset-btn" onclick="setNumber('5555555555')">5555555555</button-->
+            </div>
+        </div>
+        
+        <div class="barcode-type-group">
+            <label>Barcode Format</label><br>
+            <label>
+                <input type="radio" name="barcodeType" value="code128" checked> Code 128
+            </label>
+            <label>
+                <input type="radio" name="barcodeType" value="code39"> Code 39
+            </label><br>
+            <label>
+                <input type="radio" name="barcodeType" value="ean13"> EAN-13
+            </label>
+            <label>
+                <input type="radio" name="barcodeType" value="upca"> UPC-A
+            </label>
+        </div>
+        
+        <button onclick="generateBarcode()">Generate Barcode</button>
+        
+        <div class="barcode-container" id="barcodeContainer">
+            <div class="barcode-label" id="barcodeFormat"></div>
+            <div id="barcodeDisplay"></div>
+            <div class="button-group">
+                <button class="download-btn" onclick="downloadBarcode()">Download</button>
+                <button class="print-btn" onclick="printBarcode()">Print</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const numberInput = document.getElementById('numberInput');
+        const numberError = document.getElementById('numberError');
+        const barcodeContainer = document.getElementById('barcodeContainer');
+        const barcodeDisplay = document.getElementById('barcodeDisplay');
+        const barcodeFormatDiv = document.getElementById('barcodeFormat');
+        let lastNumber = '';
+        let lastBarcodeType = 'code128';
+
+        // Allow Enter key to generate barcode
+        numberInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') generateBarcode();
+        });
+
+        // Function to set preset number and generate barcode
+        function setNumber(number) {
+            numberInput.value = number;
+            setTimeout(generateBarcode, 100);
+        }
+
+        function generateBarcode() {
+            const number = numberInput.value.trim();
+            const barcodeType = document.querySelector('input[name="barcodeType"]:checked').value;
+            
+            numberError.classList.remove('show');
+            numberError.textContent = '';
+
+            if (!number) {
+                showError('Please enter a number');
+                return;
+            }
+
+            lastNumber = number;
+            lastBarcodeType = barcodeType;
+
+            try {
+                barcodeDisplay.innerHTML = '';
+                
+                // Create SVG element for barcode
+                const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+                svg.setAttribute('id', 'barcodeSVG');
+                barcodeDisplay.appendChild(svg);
+
+                let dataToEncode = number;
+                let format = 'CODE128';
+                let displayText = 'Code 128';
+                
+                // Format conversion for specific barcode types
+                if (barcodeType === 'ean13') {
+                    dataToEncode = formatForEAN13(number);
+                    format = 'EAN13';
+                    displayText = 'EAN-13';
+                } else if (barcodeType === 'upca') {
+                    dataToEncode = formatForUPCA(number);
+                    format = 'UPC';
+                    displayText = 'UPC-A';
+                } else if (barcodeType === 'code39') {
+                    format = 'CODE39';
+                    displayText = 'Code 39';
+                }
+
+                // Use JsBarcode to render
+                JsBarcode("#barcodeSVG", dataToEncode, {
+                    format: format,
+                    width: 2,
+                    height: 100,
+                    margin: 10,
+                    displayValue: true,
+                    fontSize: 14
+                });
+
+                barcodeFormatDiv.textContent = displayText;
+                barcodeContainer.classList.add('active');
+            } catch (error) {
+                showError('Error: ' + error.message);
+            }
+        }
+
+        function formatForEAN13(input) {
+            let digits = input.replace(/\D/g, '');
+            
+            if (digits.length === 13) {
+                return digits;
+            }
+            
+            if (digits.length === 12) {
+                return digits + calculateEAN13Checksum(digits);
+            }
+            
+            digits = digits.padStart(12, '0').substring(0, 12);
+            return digits + calculateEAN13Checksum(digits);
+        }
+
+        function calculateEAN13Checksum(digits) {
+            let sum = 0;
+            for (let i = 0; i < 12; i++) {
+                sum += parseInt(digits[i]) * (i % 2 === 0 ? 1 : 3);
+            }
+            return (10 - (sum % 10)) % 10;
+        }
+
+        function formatForUPCA(input) {
+            let digits = input.replace(/\D/g, '');
+            
+            if (digits.length === 12) {
+                return digits;
+            }
+            
+            digits = digits.padStart(11, '0').substring(0, 11);
+            let sum = 0;
+            for (let i = 0; i < 11; i++) {
+                sum += parseInt(digits[i]) * (i % 2 === 0 ? 3 : 1);
+            }
+            const checksum = (10 - (sum % 10)) % 10;
+            return digits + checksum;
+        }
+
+        function showError(message) {
+            numberError.textContent = message;
+            numberError.classList.add('show');
+        }
+
+        function downloadBarcode() {
+            const svg = document.getElementById('barcodeSVG');
+            if (!svg) return;
+
+            const svgData = new XMLSerializer().serializeToString(svg);
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            const img = new Image();
+
+            canvas.width = svg.clientWidth;
+            canvas.height = svg.clientHeight;
+            canvas.style.backgroundColor = 'white';
+
+            img.onload = function() {
+                ctx.fillStyle = 'white';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                ctx.drawImage(img, 0, 0);
+                const link = document.createElement('a');
+                link.href = canvas.toDataURL('image/png');
+                link.download = `barcode_${lastNumber}.png`;
+                link.click();
+            };
+
+            img.src = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(svgData)));
+        }
+
+        function printBarcode() {
+            window.print();
+        }
+    </script>
+</body>
+</html>
