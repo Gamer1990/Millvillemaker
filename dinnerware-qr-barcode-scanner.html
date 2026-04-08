@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dinnerware QR/Barcode Scanner - Sams Club Shopping</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.3.4/html5-qrcode.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@ericblade/quagga2@1.9.15/dist/quagga.js"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f5f5f5; padding: 20px; }
+    .container { max-width: 500px; margin: 0 auto; }
+    .header { background: #fff; padding: 20px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+    h1 { font-size: 24px; color: #333; margin-bottom: 4px; }
+    .subtitle { font-size: 14px; color: #666; }
+    .scanner-box { background: #fff; padding: 20px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+    #reader { width: 100%; max-width: 400px; margin: 0 auto 20px; }
+    .scanner-tabs { display: flex; gap: 10px; margin-bottom: 16px; border-bottom: 1px solid #ddd; }
+    .scanner-tab { padding: 10px 16px; cursor: pointer; border: none; background: none; font-size: 14px; color: #666; border-bottom: 2px solid transparent; }
+    .scanner-tab.active { color: #4CAF50; border-bottom-color: #4CAF50; }
+    .scanner-content { display: none; }
+    .scanner-content.active { display: block; }
+    .controls { display: flex; gap: 10px; margin-bottom: 20px; }
+    button { padding: 10px 16px; border: 1px solid #ddd; background: #f9f9f9; border-radius: 6px; cursor: pointer; font-size: 14px; transition: all 0.2s; }
+    button:hover { background: #f0f0f0; border-color: #999; }
+    button.primary { background: #4CAF50; color: #fff; border: none; }
+    button.primary:hover { background: #45a049; }
+    .input-group { display: flex; gap: 8px; margin-bottom: 16px; }
+    input, select { flex: 1; padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px; }
+    input:focus { outline: none; border-color: #4CAF50; }
+    .items-list { background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+    .item-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #eee; }
+    .item-row:last-child { border-bottom: none; }
+    .item-info { flex: 1; }
+    .item-name { font-weight: 500; color: #333; }
+    .item-meta { font-size: 12px; color: #999; margin-top: 4px; }
+    .item-qty { font-size: 14px; color: #666; margin: 0 8px; }
+    .delete-btn { background: #ff6b6b; color: #fff; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 12px; }
+    .delete-btn:hover { background: #ff5252; }
+    .status { padding: 12px; border-radius: 6px; margin-bottom: 16px; font-size: 14px; }
+    .status.success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+    .status.error { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+    .status.info { background: #d1ecf1; color: #0c5460; border: 1px solid #bee5eb; }
+    .empty-state { text-align: center; color: #999; padding: 40px 20px; }
+    .action-buttons { display: flex; gap: 10px; margin-top: 20px; }
+    .action-buttons button { flex: 1; }
+    .barcode-input { font-family: monospace; background: #f9f9f9; }
+    .scan-mode-badge { display: inline-block; background: #4CAF50; color: #fff; padding: 4px 8px; border-radius: 3px; font-size: 11px; margin-left: 8px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>🍽️ Dinnerware Scanner <span class="scan-mode-badge" id="modeBadge">QR Mode</span></h1>
+      <p class="subtitle">Sams Club shopping — QR & barcode enabled</p>
+    </div>
+
+    <div class="scanner-box">
+      <div class="scanner-tabs">
+        <button class="scanner-tab active" onclick="switchScanMode('qr')">QR Code</button>
+        <button class="scanner-tab" onclick="switchScanMode('barcode')">Barcode</button>
+      </div>
+
+      <!-- QR MODE -->
+      <div id="qr-mode" class="scanner-content active">
+        <div class="controls">
+          <button class="primary" id="startQR">Start Camera</button>
+          <button id="stopQR" disabled>Stop Camera</button>
+        </div>
+        <div id="reader"></div>
+      </div>
+
+      <!-- BARCODE MODE -->
+      <div id="barcode-mode" class="scanner-content">
+        <div class="controls">
+          <button class="primary" id="startBarcode">Start Camera</button>
+          <button id="stopBarcode" disabled>Stop Camera</button>
+        </div>
+        <div id="barcode-reader" style="position: relative; width: 100%; max-width: 400px; margin: 0 auto;">
+          <video id="video" width="100%" height="300" style="border: 1px solid #ddd; border-radius: 6px;"></video>
+          <canvas id="canvas" style="display:none;"></canvas>
+        </div>
+        <p style="text-align: center; color: #999; font-size: 12px; margin-top: 8px;">Point camera at barcode</p>
+      </div>
+
+      <!-- MANUAL INPUT -->
+      <div style="margin-top: 16px; padding-top: 16px; border-top: 1px solid #eee;">
+        <p style="font-size: 12px; color: #999; margin-bottom: 8px;">Or add manually:</p>
+        <div class="input-group">
+          <input type="text" id="itemInput" placeholder="Item name">
+          <input type="number" id="qtyInput" placeholder="Qty" min="1" value="1" style="width: 60px;">
+          <input type="number" id="priceInput" placeholder="Price" step="0.01" style="width: 70px;">
+          <button onclick="addItemManual()" style="background: #4CAF50; color: #fff; border: none;">Add</button>
+        </div>
+      </div>
+
+      <div id="status"></div>
+    </div>
+
+    <div class="items-list">
+      <h2 style="font-size: 18px; margin-bottom: 16px; color: #333;">Items to buy</h2>
+      <div id="itemsList"></div>
+      
+      <div class="action-buttons">
+        <button onclick="syncToSheet()" class="primary">Sync to Sheet</button>
+        <button onclick="clearAll()" style="background: #ff6b6b; color: #fff; border: none;">Clear All</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Barcode Database (inline for simplicity)
+    const barcodeDatabase = {
+      "688267186261": { name: "Plates 12-inch", supplier: "Sams Club", cost: 15.99, qty: 1 },
+      "688267103847": { name: "Ceramic bowls", supplier: "Sams Club", cost: 8.50, qty: 1 },
+      "688267195847": { name: "Silverware set", supplier: "Sams Club", cost: 12.99, qty: 1 },
+      "688267204621": { name: "Drinking glasses", supplier: "Sams Club", cost: 6.50, qty: 1 },
+      "688267218465": { name: "Napkins pack", supplier: "Sams Club", cost: 4.99, qty: 1 }
+    };
+
+    let items = JSON.parse(localStorage.getItem('dinnerwareItems') || '[]');
+    let currentMode = 'qr';
+    let quaggaInitialized = false;
+
+    function switchScanMode(mode) {
+      currentMode = mode;
+      document.querySelectorAll('.scanner-content').forEach(el => el.classList.remove('active'));
+      document.getElementById(mode + '-mode').classList.add('active');
+      document.querySelectorAll('.scanner-tab').forEach(el => el.classList.remove('active'));
+      event.target.classList.add('active');
+      
+      const badge = document.getElementById('modeBadge');
+      badge.textContent = mode === 'qr' ? 'QR Mode' : 'Barcode Mode';
+      
+      // Stop any running scanner
+      stopAllScanners();
+    }
+
+    function renderItems() {
+      const list = document.getElementById('itemsList');
+      if (items.length === 0) {
+        list.innerHTML = '<div class="empty-state">No items yet. Start scanning or add manually.</div>';
+        return;
+      }
+      list.innerHTML = items.map((item, idx) => `
+        <div class="item-row">
+          <div class="item-info">
+            <div class="item-name">${item.name}</div>
+            <div class="item-meta">$${item.price || 'N/A'} • Added ${new Date(item.date).toLocaleDateString()}</div>
+          </div>
+          <div class="item-qty">×${item.qty}</div>
+          <button class="delete-btn" onclick="deleteItem(${idx})">Remove</button>
+        </div>
+      `).join('');
+    }
+
+    function addItemManual() {
+      const name = document.getElementById('itemInput').value.trim();
+      const qty = parseInt(document.getElementById('qtyInput').value) || 1;
+      const price = parseFloat(document.getElementById('priceInput').value) || 0;
+      
+      if (!name) {
+        showStatus('Please enter item name', 'error');
+        return;
+      }
+      
+      items.push({ name, qty, price, date: new Date().toISOString() });
+      localStorage.setItem('dinnerwareItems', JSON.stringify(items));
+      document.getElementById('itemInput').value = '';
+      document.getElementById('qtyInput').value = '1';
+      document.getElementById('priceInput').value = '';
+      renderItems();
+      showStatus(`Added "${name}"`, 'success');
+    }
+
+    function deleteItem(idx) {
+      items.splice(idx, 1);
+      localStorage.setItem('dinnerwareItems', JSON.stringify(items));
+      renderItems();
+    }
+
+    function clearAll() {
+      if (confirm('Clear all items?')) {
+        items = [];
+        localStorage.setItem('dinnerwareItems', JSON.stringify(items));
+        renderItems();
+        showStatus('All items cleared', 'info');
+      }
+    }
+
+    function showStatus(msg, type) {
+      const statusEl = document.getElementById('status');
+      statusEl.className = `status ${type}`;
+      statusEl.textContent = msg;
+      setTimeout(() => statusEl.textContent = '', 4000);
+    }
+
+    function onScanSuccess(decodedText) {
+      try {
+        const item = decodedText.split('|').reduce((acc, pair) => {
+          const [k, v] = pair.split('=');
+          acc[k?.toLowerCase()] = v;
+          return acc;
+        }, {});
+        
+        const name = item.item || decodedText;
+        const qty = parseInt(item.qty) || 1;
+        const price = parseFloat(item.price) || 0;
+        
+        items.push({ name, qty, price, date: new Date().toISOString() });
+        localStorage.setItem('dinnerwareItems', JSON.stringify(items));
+        renderItems();
+        showStatus(`✓ Added: ${name}`, 'success');
+      } catch (e) {
+        showStatus('Invalid QR format. Add manually.', 'error');
+      }
+    }
+
+    function onBarcodeDetected(result) {
+      const barcode = result.codeResult.code;
+      const product = barcodeDatabase[barcode];
+      
+      if (product) {
+        items.push({
+          name: product.name,
+          qty: product.qty || 1,
+          price: product.cost || 0,
+          date: new Date().toISOString()
+        });
+        localStorage.setItem('dinnerwareItems', JSON.stringify(items));
+        renderItems();
+        showStatus(`✓ Found: ${product.name}`, 'success');
+        document.getElementById('stopBarcode').click();
+      }
+    }
+
+    // QR Scanner
+    document.getElementById('startQR').addEventListener('click', () => {
+      Html5Qrcode.getCameras().then(cameras => {
+        if (cameras && cameras.length) {
+          const html5QrCode = new Html5Qrcode('reader');
+          html5QrCode.start(
+            cameras[0].id,
+            { fps: 10, qrbox: { width: 250, height: 250 } },
+            onScanSuccess
+          );
+          document.getElementById('startQR').disabled = true;
+          document.getElementById('stopQR').disabled = false;
+          showStatus('QR camera started', 'info');
+          
+          document.getElementById('stopQR').onclick = () => {
+            html5QrCode.stop();
+            document.getElementById('startQR').disabled = false;
+            document.getElementById('stopQR').disabled = true;
+            showStatus('QR camera stopped', 'info');
+          };
+        }
+      }).catch(() => showStatus('Camera error', 'error'));
+    });
+
+    // Barcode Scanner
+    document.getElementById('startBarcode').addEventListener('click', () => {
+      Quagga.init({
+        inputStream: {
+          name: 'Live',
+          type: 'LiveStream',
+          target: document.querySelector('#video'),
+          constraints: { facingMode: 'environment' }
+        },
+        decoder: { readers: ['ean_reader', 'ean_8_reader', 'code_128_reader', 'upc_reader'] },
+        locator: { patchSize: 'medium' }
+      }, err => {
+        if (err) {
+          showStatus('Camera error: ' + err.message, 'error');
+          return;
+        }
+        Quagga.start();
+        quaggaInitialized = true;
+        document.getElementById('startBarcode').disabled = true;
+        document.getElementById('stopBarcode').disabled = false;
+        showStatus('Barcode camera started', 'info');
+        
+        Quagga.onDetected(onBarcodeDetected);
+        
+        document.getElementById('stopBarcode').onclick = () => {
+          Quagga.stop();
+          quaggaInitialized = false;
+          document.getElementById('startBarcode').disabled = false;
+          document.getElementById('stopBarcode').disabled = true;
+          showStatus('Barcode camera stopped', 'info');
+        };
+      });
+    });
+
+    function stopAllScanners() {
+      if (document.getElementById('stopQR') && !document.getElementById('stopQR').disabled) {
+        document.getElementById('stopQR').click();
+      }
+      if (document.getElementById('stopBarcode') && !document.getElementById('stopBarcode').disabled) {
+        document.getElementById('stopBarcode').click();
+      }
+    }
+
+    function syncToSheet() {
+      if (items.length === 0) {
+        showStatus('No items to sync', 'error');
+        return;
+      }
+      
+      let synced = 0;
+      const total = items.length;
+      
+      items.forEach((item, idx) => {
+        const payload = {
+          system: 'dinnerware',
+          item: item.name,
+          qty: item.qty,
+          price: item.price
+        };
+        
+        fetch('https://script.google.com/macros/s/AKfycbxPA0AfgY9yOV56E-Tu9FXVIrYYylBrD0yXunIAYcsu5_6XzXPTuHNHFzrKqPC0imw-/exec', {
+          method: 'POST',
+          body: JSON.stringify(payload)
+        })
+        .then(response => response.text())
+        .then(data => {
+          synced++;
+          if (synced === total) {
+            showStatus(`✓ Synced ${total} items to Google Sheet!`, 'success');
+            items = [];
+            localStorage.setItem('dinnerwareItems', JSON.stringify(items));
+            renderItems();
+          }
+        })
+        .catch(err => {
+          showStatus('Sync error: ' + err.message, 'error');
+        });
+      });
+    }
+
+    renderItems();
+  </script>
+</body>
+</html>
