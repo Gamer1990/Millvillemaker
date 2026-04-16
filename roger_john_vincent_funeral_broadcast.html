@@ -1,0 +1,386 @@
+<html>
+<head>
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--font-sans);
+  background: linear-gradient(135deg, #f5f3f0 0%, #e8e4df 100%);
+  min-height: 100vh;
+  padding: 1rem;
+}
+
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.hero {
+  background: var(--color-background-primary);
+  border-radius: var(--border-radius-lg);
+  border: 0.5px solid var(--color-border-tertiary);
+  padding: 2.5rem 2rem;
+  text-align: center;
+  margin-bottom: 2rem;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+}
+
+.memorial-badge {
+  display: inline-block;
+  background: var(--color-background-secondary);
+  border: 0.5px solid var(--color-border-tertiary);
+  border-radius: var(--border-radius-md);
+  padding: 0.5rem 1rem;
+  margin-bottom: 1.5rem;
+  font-size: 13px;
+  color: var(--color-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.photo-container {
+  margin: 1.5rem 0;
+}
+
+.photo {
+  width: 160px;
+  height: 160px;
+  border-radius: var(--border-radius-lg);
+  border: 0.5px solid var(--color-border-tertiary);
+  object-fit: cover;
+  margin: 0 auto;
+  display: block;
+}
+
+h1 {
+  font-size: 28px;
+  font-weight: 500;
+  color: var(--color-text-primary);
+  margin-bottom: 0.5rem;
+  line-height: 1.3;
+}
+
+.dates {
+  font-size: 15px;
+  color: var(--color-text-secondary);
+  margin-bottom: 0.5rem;
+}
+
+.broadcast-section {
+  background: var(--color-background-primary);
+  border: 0.5px solid var(--color-border-tertiary);
+  border-radius: var(--border-radius-lg);
+  padding: 2rem;
+  margin-bottom: 2rem;
+}
+
+.section-title {
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--color-text-primary);
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.live-badge {
+  display: inline-block;
+  background: #E24B4A;
+  color: white;
+  font-size: 11px;
+  font-weight: 500;
+  padding: 4px 8px;
+  border-radius: var(--border-radius-md);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+.time-highlight {
+  background: linear-gradient(135deg, #f5f3f0 0%, #e8e4df 100%);
+  border: 2px solid var(--color-border-secondary);
+  border-radius: var(--border-radius-lg);
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.time-label {
+  font-size: 12px;
+  color: var(--color-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 0.75rem;
+}
+
+.time-display {
+  font-size: 24px;
+  font-weight: 500;
+  color: var(--color-text-primary);
+  margin-bottom: 0.5rem;
+}
+
+.countdown {
+  font-size: 13px;
+  color: var(--color-text-secondary);
+  margin-bottom: 1rem;
+}
+
+.live-badge-container {
+  margin-top: 1rem;
+}
+
+.broadcast-placeholder {
+  background: var(--color-background-secondary);
+  border: 2px dashed var(--color-border-secondary);
+  border-radius: var(--border-radius-lg);
+  padding: 2rem;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.placeholder-text {
+  font-size: 14px;
+  color: var(--color-text-secondary);
+  line-height: 1.8;
+  margin-bottom: 1rem;
+}
+
+.placeholder-status {
+  display: inline-block;
+  background: var(--color-background-info);
+  color: var(--color-text-info);
+  font-size: 12px;
+  padding: 0.5rem 1rem;
+  border-radius: var(--border-radius-md);
+  font-weight: 500;
+  margin-bottom: 1rem;
+}
+
+.join-button {
+  display: block;
+  background: var(--color-background-primary);
+  border: 2px solid #085041;
+  border-radius: var(--border-radius-lg);
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  text-decoration: none;
+  text-align: center;
+  font-size: 16px;
+  font-weight: 500;
+  color: #085041;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.join-button:hover {
+  background: linear-gradient(135deg, #f5f3f0 0%, #e8e4df 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.join-button.disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  border-color: var(--color-border-secondary);
+  color: var(--color-text-secondary);
+}
+
+.info-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.info-card {
+  background: var(--color-background-secondary);
+  border: 0.5px solid var(--color-border-tertiary);
+  border-radius: var(--border-radius-md);
+  padding: 1.25rem;
+}
+
+.info-label {
+  font-size: 12px;
+  color: var(--color-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 0.5rem;
+}
+
+.info-content {
+  font-size: 15px;
+  color: var(--color-text-primary);
+  font-weight: 500;
+  line-height: 1.5;
+}
+
+.location-card {
+  background: var(--color-background-secondary);
+  border: 0.5px solid var(--color-border-tertiary);
+  border-radius: var(--border-radius-md);
+  padding: 1.25rem;
+  grid-column: 1 / -1;
+}
+
+.location-label {
+  font-size: 12px;
+  color: var(--color-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 0.5rem;
+}
+
+.location-content {
+  font-size: 14px;
+  color: var(--color-text-primary);
+  line-height: 1.6;
+}
+
+.instructions {
+  background: var(--color-background-secondary);
+  border: 0.5px solid var(--color-border-tertiary);
+  border-radius: var(--border-radius-md);
+  padding: 1.25rem;
+  margin-bottom: 1.5rem;
+}
+
+.instructions-title {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--color-text-primary);
+  margin-bottom: 0.75rem;
+}
+
+.instructions-text {
+  font-size: 13px;
+  color: var(--color-text-secondary);
+  line-height: 1.7;
+}
+
+.footer-text {
+  text-align: center;
+  font-size: 13px;
+  color: var(--color-text-secondary);
+  line-height: 1.6;
+  padding-top: 2rem;
+  border-top: 0.5px solid var(--color-border-tertiary);
+  margin-top: 2rem;
+}
+
+.tribute-note {
+  background: var(--color-background-secondary);
+  border: 0.5px solid var(--color-border-tertiary);
+  border-radius: var(--border-radius-md);
+  padding: 1.25rem;
+  margin-bottom: 1.5rem;
+  font-size: 13px;
+  color: var(--color-text-secondary);
+  line-height: 1.7;
+}
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="hero">
+    <div class="memorial-badge">Memorial Service Broadcast</div>
+    <div class="photo-container">
+      <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==" alt="Roger John Vincent" class="photo" style="width:160px;height:160px;border-radius:12px;border:0.5px solid rgba(0,0,0,0.1);object-fit:cover;">
+    </div>
+    <h1>Roger John Vincent</h1>
+    <div class="dates">A celebration of life and legacy</div>
+  </div>
+
+  <div class="broadcast-section">
+    <div class="section-title">📡 Live Service Tomorrow</div>
+    <div class="time-highlight">
+      <div class="time-label">Service Time</div>
+      <div class="time-display">11:00 AM</div>
+      <div class="countdown">Tomorrow · Be ready a few minutes early</div>
+      <div class="live-badge-container">
+        <span class="live-badge">🔴 LIVE</span>
+      </div>
+    </div>
+    
+    <div class="broadcast-placeholder">
+      <div class="placeholder-status">Broadcast Link Coming Soon</div>
+      <div class="placeholder-text">
+        The broadcast link will be available shortly. Check back here or refresh this page for the YouTube or Zoom link to join the live service.
+      </div>
+      <button class="join-button disabled" onclick="alert('Broadcast link will be available before 11:00 AM tomorrow')">
+        Join Live Service (Link Added Soon)
+      </button>
+    </div>
+
+    <div class="instructions">
+      <div class="instructions-title">How to Join</div>
+      <div class="instructions-text">
+        <strong>Step 1:</strong> Check back here for the broadcast link (YouTube or Zoom)<br><br>
+        <strong>Step 2:</strong> Have your device ready (phone, tablet, or computer)<br><br>
+        <strong>Step 3:</strong> Click the link at 10:55 AM to allow time to join
+      </div>
+    </div>
+
+    <div class="info-grid">
+      <div class="info-card">
+        <div class="info-label">Date</div>
+        <div class="info-content">Tomorrow</div>
+      </div>
+      <div class="info-card">
+        <div class="info-label">Time</div>
+        <div class="info-content">11:00 AM</div>
+      </div>
+      <div class="info-card">
+        <div class="info-label">Duration</div>
+        <div class="info-content">~1 hour</div>
+      </div>
+      <div class="info-card">
+        <div class="info-label">Format</div>
+        <div class="info-content">Live Video Stream</div>
+      </div>
+      
+      <div class="location-card">
+        <div class="location-label">Service Location</div>
+        <div class="location-content">
+          <strong>The Church of Jesus Christ of Latter-day Saints</strong><br>
+          110 S. Main Street<br>
+          Millville, Utah
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="broadcast-section">
+    <div class="section-title">📹 Tribute Slides</div>
+    <div class="tribute-note">
+      <strong>Note:</strong> Family tribute slides and photos are available through a private memorial video. Access details will be shared with the family.
+    </div>
+  </div>
+
+  <div class="broadcast-section">
+    <div class="section-title">ℹ️ Important Information</div>
+    <p style="font-size: 14px; color: var(--color-text-primary); line-height: 1.8; margin-bottom: 1rem;">
+      This memorial service is being streamed live for family and friends who are unable to attend in person. The broadcast will be available during the service.
+    </p>
+    <p style="font-size: 14px; color: var(--color-text-secondary); line-height: 1.8;">
+      For questions, please contact the family directly.
+    </p>
+  </div>
+
+  <div class="footer-text">
+    <p>In loving memory of Roger John Vincent</p>
+    <p style="margin-top: 0.5rem; font-size: 12px;">A life well lived, a legacy forever cherished</p>
+  </div>
+</div>
+</body>
+</html>
