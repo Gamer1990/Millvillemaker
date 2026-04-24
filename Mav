@@ -256,12 +256,12 @@
         <div class="form-group">
             <label>Quick Presets</label>
             <div class="preset-buttons">
-                <button type="button" class="preset-btn" onclick="setNumber('4357535353')">4357535353</button>
+                <!~-button type="button" class="preset-btn" onclick="setNumber('4357535353')">4357535353</button-->
                 <button type="button" class="preset-btn" onclick="setNumber('4355126705')">4355126705</button>
                 <button type="button" class="preset-btn" onclick="setNumber('4352655079')">4352655079</button>
                 <button type="button" class="preset-btn" onclick="setNumber('4357604751')">4357604751</button>
                 <button type="button" class="preset-btn" onclick="setNumber('4357605864')">4357605864</button>
-                <button type="button" class="preset-btn" onclick="setNumber('4352323513')">4352323513</button>
+                <!--button type="button" class="preset-btn" onclick="setNumber('4352323513')">4352323513</button-->
                 <button type="button" class="preset-btn" onclick="setNumber('4353749505')">4353749505</button>
                 <button type="button" class="preset-btn" onclick="setNumber('4357607596')">4357607596</button>
               <!--button type="button" class="preset-btn" onclick="setNumber('5555555555')">5555555555</button-->
