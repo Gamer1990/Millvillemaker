@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Baptism Broadcast</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+            background: linear-gradient(180deg, #f5f5f5 0%, #ffffff 100%);
+            padding: 40px 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 32px;
+            color: #1f2937;
+            margin-bottom: 12px;
+            font-weight: 500;
+            letter-spacing: -0.5px;
+        }
+
+        .header p {
+            font-size: 16px;
+            color: #6b7280;
+            margin-bottom: 20px;
+        }
+
+        .youtube-link {
+            display: inline-block;
+            padding: 10px 20px;
+            background: #ffffff;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            color: #d32f2f;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .youtube-link:hover {
+            border-color: #d32f2f;
+            background: #fafafa;
+        }
+
+        .stream-section {
+            background: white;
+            border-radius: 8px;
+            border: 1px solid #e5e7eb;
+            overflow: hidden;
+            margin-bottom: 40px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .iframe-wrapper {
+            position: relative;
+            width: 100%;
+            padding-bottom: 56.25%;
+            height: 0;
+            overflow: hidden;
+            background: #000;
+        }
+
+        .iframe-wrapper iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        .images-section {
+            background: white;
+            border-radius: 8px;
+            border: 1px solid #e5e7eb;
+            padding: 40px 30px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .images-title {
+            font-size: 18px;
+            color: #1f2937;
+            font-weight: 500;
+            margin-bottom: 24px;
+            text-align: center;
+        }
+
+        .images-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .image-card {
+            text-align: center;
+        }
+
+        .image-card img {
+            width: 100%;
+            height: 400px;
+            object-fit: cover;
+            border-radius: 6px;
+            border: 1px solid #e5e7eb;
+            background: #f9fafb;
+        }
+
+        .image-caption {
+            font-size: 13px;
+            color: #6b7280;
+            margin-top: 10px;
+            line-height: 1.4;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Live Baptism Broadcast</h1>
+            <h2>Stake Baptism Day Will Start Soon</h2>
+            <p>Join us as we share this sacred ordinance</p>
+            <a href="https://www.youtube.com/watch?v=UCx76XUstBI2WvhS25jNc0lA" target="_blank" class="youtube-link">Watch on YouTube</a>
+        </div>
+
+        <div class="stream-section">
+            <div class="iframe-wrapper">
+                <iframe src="https://www.youtube.com/embed/live_stream?channel=UCx76XUstBI2WvhS25jNc0lA" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+        </div>
+
+        <div class="images-section">
+            <h2 class="images-title">The Ordinance of Baptism</h2>
+            <div class="images-grid">
+                <div class="image-card">
+<img src="https://images-us-prod.cms.commerce.dynamics.com/cms/api/fswvqbgntk/imageFileData/search?fileName=/Products%2FPI341800_000_001.png&fallback=/Products/PI341800_000_001.jpg,/Products/PI341800_000_001.png,/Products/PI341800_000_001.webp&w=0&h=772&q=80&m=6&f=jpg&cropfocalregion=true" alt="John the Baptist baptizing Jesus Christ">
+                    <p class="image-caption">John the Baptist baptizing in the Jordan River</p>
+                </div>
+
+                <div class="image-card">
+                    <img src="https://i0.wp.com/teachldschildren.com/wp-content/uploads/2012/03/Screenshot-2025-01-30-at-9.12.38%E2%80%AFAM.png?ssl=1" alt="Baptismal waters">
+                    <p class="image-caption">The sacred waters of baptism</p>
+                </div>
+
+                <div class="image-card">
+				                    <img src="C:\Users\bills\Downloads\IMG_1074.jpg?w=400&h=300&fit=crop" alt="Covenant waters">
+                    <p class="image-caption">Making covenants through this holy ordinance</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
