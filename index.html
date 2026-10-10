@@ -36,6 +36,13 @@
             letter-spacing: -0.5px;
         }
 
+        .header h2 {
+            font-size: 20px;
+            color: #374151;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
         .header p {
             font-size: 16px;
             color: #6b7280;
@@ -103,20 +110,25 @@
             text-align: center;
         }
 
+        /* Always three columns, one row */
         .images-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            grid-template-columns: repeat(3, 1fr);
             gap: 20px;
+            align-items: start;
         }
 
         .image-card {
             text-align: center;
+            min-width: 0;
         }
 
+        /* Taller photos, full picture shown (no cropping) */
         .image-card img {
+            display: block;
             width: 100%;
-            height: 400px;
-            object-fit: cover;
+            height: 450px;
+            object-fit: contain;
             border-radius: 6px;
             border: 1px solid #e5e7eb;
             background: #f9fafb;
@@ -127,6 +139,24 @@
             color: #6b7280;
             margin-top: 10px;
             line-height: 1.4;
+        }
+
+        @media (max-width: 600px) {
+            .images-section {
+                padding: 24px 12px;
+            }
+
+            .images-grid {
+                gap: 8px;
+            }
+
+            .image-card img {
+                height: 160px;
+            }
+
+            .image-caption {
+                font-size: 11px;
+            }
         }
     </style>
 </head>
@@ -141,27 +171,25 @@
 
         <div class="stream-section">
             <div class="iframe-wrapper">
-             <iframe src="https://www.youtube.com/embed/bgY_SB97M8M" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe> </div>
+                <iframe src="https://www.youtube.com/embed/bgY_SB97M8M" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
         </div>
 
         <div class="images-section">
             <h2 class="images-title">The Ordinance of Baptism</h2>
             <div class="images-grid">
                 <div class="image-card">
-<img src="https://images-us-prod.cms.commerce.dynamics.com/cms/api/fswvqbgntk/imageFileData/search?fileName=/Products%2FPI341800_000_001.png&fallback=/Products/PI341800_000_001.jpg,/Products/PI341800_000_001.png,/Products/PI341800_000_001.webp&w=0&h=772&q=80&m=6&f=jpg&cropfocalregion=true" alt="John the Baptist baptizing Jesus Christ">
+                    <img src="https://images-us-prod.cms.commerce.dynamics.com/cms/api/fswvqbgntk/imageFileData/search?fileName=/Products%2FPI341800_000_001.png&fallback=/Products/PI341800_000_001.jpg,/Products/PI341800_000_001.png,/Products/PI341800_000_001.webp&w=0&h=772&q=80&m=6&f=jpg&cropfocalregion=true" alt="John the Baptist baptizing Jesus Christ">
                     <p class="image-caption">John the Baptist baptizing in the Jordan River</p>
                 </div>
-<div class="image-card">
-				                    <img src="IMG_1074.jpg?w=400&h=300&fit=crop" alt="Covenant waters">
+                <div class="image-card">
+                    <img src="IMG_1074.jpg" alt="Andrew in white baptismal clothing">
                     <p class="image-caption">Making covenants through this holy ordinance</p>
-</div>
+                </div>
                 <div class="image-card">
                     <img src="https://i0.wp.com/teachldschildren.com/wp-content/uploads/2012/03/Screenshot-2025-01-30-at-9.12.38%E2%80%AFAM.png?ssl=1" alt="Baptismal waters">
                     <p class="image-caption">The sacred waters of baptism</p>
                 </div>
-
-                
-               
             </div>
         </div>
     </div>
